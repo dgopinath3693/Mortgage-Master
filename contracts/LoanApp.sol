@@ -28,7 +28,17 @@ contract LoanApp {
         approved = true;
     }
 
-   //print out loan amount for user, and transfer the full loan amount to user account balance
+    //picks payment plan 1 - highest payment, shortest duration
+    function poo {
+
+    }
+
+    //picks payment plan 2 - medium payment, medium duration
+
+    //picks payment plan 3 - lowest payment, highest duration
+
+  
+     //print out loan amount for user, and transfer the full loan amount to user account balance
     function withdraw() public {
         // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
          console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
