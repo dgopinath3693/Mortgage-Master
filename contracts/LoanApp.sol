@@ -7,48 +7,53 @@ import "hardhat/console.sol";
 contract LoanApp {
     
     //how much the total loan is, before splitting into monthly plans
-    uint public totalReqAmount;
-    address payable public owner;
+    uint public totalLoanAmount;
     bool approved = false;
-    //links address to user balance 
-    uint public userBalance; 
+    address public user = msg.sender; //user's address
+    mapping(address => uint256) userBalance;
 
-    event Withdrawal(uint amount, uint when);
-
+    event Withdrawal(uint _totalLoanAmount); // the event that will be emitted to frontend
     
-    constructor(uint _totalReqAmount) payable {
-        uint minReqBalance = _totalReqAmount/4; 
+    constructor(uint _totalLoanAmount) payable {
+        setUserBalance(msg.sender, 100000); //currently hardcoded to 100000
+        uint minReqBalance = _totalLoanAmount/4; 
         require(
-            minReqBalance < _userBalance,
+            minReqBalance < userBalance[msg.sender],
             "User balance is under the required minimum amount"
         );
-
-        totalReqAmount = _totalReqAmount;
-        owner = payable(msg.sender);
+        totalLoanAmount = _totalLoanAmount;
         approved = true;
     }
 
     //picks payment plan 1 - highest payment, shortest duration
-    function poo {
-
-    }
 
     //picks payment plan 2 - medium payment, medium duration
 
     //picks payment plan 3 - lowest payment, highest duration
 
   
-     //print out loan amount for user, and transfer the full loan amount to user account balance
+     /**
+      * Withdraw the full loan amount to the user's account balance if they are approved.
+      */
     function withdraw() public {
         // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
-         console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
-        
+        // console.log("The user's address: %s", user,"and the user's balance is %s", userBalance);
         require(approved);
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
+        require(msg.sender == user, "You aren't the owner");
 
-        emit Withdrawal(address(this).balance, block.timestamp);
+        userBalance[msg.sender] += totalLoanAmount;
 
-        owner.transfer(address(this).balance);
+        emit Withdrawal(totalLoanAmount);
+    }
+
+
+
+    /**
+     * Method that updates the userBalance mapping to the user's current balance in their account when trying
+     * to apply for a loan. The default userBalance is currently hardcoded to a specific value
+     * for simpler functionality.
+     */
+    function setUserBalance(address _user, uint _balance) internal {
+        userBalance[_user] = _balance;
     }
 }
