@@ -11,6 +11,7 @@ contract LoanApp {
     bool approved = false;
     address public user = msg.sender; //user's address
     mapping(address => uint256) userBalance;
+    string public typeOfLoan; 
 
     event Withdrawal(uint _totalLoanAmount); // the event that will be emitted to frontend
     
@@ -25,12 +26,83 @@ contract LoanApp {
         approved = true;
     }
 
-    //picks payment plan 1 - highest payment, shortest duration
+    uint interestRate = 0; 
+    uint monthlyLoan = 0; 
 
-    //picks payment plan 2 - medium payment, medium duration
+    /**
+     * This payment plan is the shortest duration, but has the highest payments per month.
+     */
+    function shortestPaymentPlan() public returns (uint256) {
+        uint256 numMonths;
+        if (keccak256(abi.encodePacked(typeOfLoan)) == keccak256(abi.encodePacked("Home"))) {
+            interestRate = 8; // 0.08 scaled by 100
+            numMonths = 15 * 12;
+        } else if (keccak256(abi.encodePacked(typeOfLoan)) == keccak256(abi.encodePacked("Auto"))) {
+            interestRate = 7; // 0.07 scaled by 100
+            numMonths = 3 * 12;
+        } else if (keccak256(abi.encodePacked(typeOfLoan)) == keccak256(abi.encodePacked("Personal"))) {
+            interestRate = 10; // 0.10 scaled by 100
+            numMonths = 2 * 12;
+        }
 
-    //picks payment plan 3 - lowest payment, highest duration
+        uint256 rate = interestRate * 10**16; // further scale up by 10^16
+        uint256 numerator = totalLoanAmount * rate * ((1 + rate)**numMonths);
+        uint256 denominator = ((1 + rate)**numMonths - 1) * 10**18; // scale down by 10^18
 
+        monthlyLoan = numerator / denominator;
+
+        return monthlyLoan;
+    }
+
+    /**
+     * This payment plan is the shortest duration, but has the highest payments per month.
+     */
+    function averagePaymentPlan() public returns (uint256) {
+        uint256 numMonths;
+        if (keccak256(abi.encodePacked(typeOfLoan)) == keccak256(abi.encodePacked("Home"))) {
+            interestRate = 8; // 0.08 scaled by 100
+            numMonths = 20 * 12;
+        } else if (keccak256(abi.encodePacked(typeOfLoan)) == keccak256(abi.encodePacked("Auto"))) {
+            interestRate = 7; // 0.07 scaled by 100
+            numMonths = 6 * 12;
+        } else if (keccak256(abi.encodePacked(typeOfLoan)) == keccak256(abi.encodePacked("Personal"))) {
+            interestRate = 10; // 0.10 scaled by 100
+            numMonths = 5 * 12;
+        }
+
+        uint256 rate = interestRate * 10**16; // further scale up by 10^16
+        uint256 numerator = totalLoanAmount * rate * ((1 + rate)**numMonths);
+        uint256 denominator = ((1 + rate)**numMonths - 1) * 10**18; // scale down by 10^18
+
+        monthlyLoan = numerator / denominator;
+
+        return monthlyLoan;
+    }
+
+    /**
+     * This payment plan is the shortest duration, but has the highest payments per month.
+     */
+    function longestPaymentPlan() public returns (uint256) {
+        uint256 numMonths;
+        if (keccak256(abi.encodePacked(typeOfLoan)) == keccak256(abi.encodePacked("Home"))) {
+            interestRate = 8; // 0.08 scaled by 100
+            numMonths = 30 * 12;
+        } else if (keccak256(abi.encodePacked(typeOfLoan)) == keccak256(abi.encodePacked("Auto"))) {
+            interestRate = 7; // 0.07 scaled by 100
+            numMonths = 8 * 12;
+        } else if (keccak256(abi.encodePacked(typeOfLoan)) == keccak256(abi.encodePacked("Personal"))) {
+            interestRate = 10; // 0.10 scaled by 100
+            numMonths = 7 * 12;
+        }
+
+        uint256 rate = interestRate * 10**16; // further scale up by 10^16
+        uint256 numerator = totalLoanAmount * rate * ((1 + rate)**numMonths);
+        uint256 denominator = ((1 + rate)**numMonths - 1) * 10**18; // scale down by 10^18
+
+        monthlyLoan = numerator / denominator;
+
+        return monthlyLoan;
+    }
   
      /**
       * Withdraw the full loan amount to the user's account balance if they are approved.
