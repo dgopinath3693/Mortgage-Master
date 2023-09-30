@@ -12,7 +12,7 @@ contract LoanApp {
     bool approved = false;
     //links address to user balance 
     uint public userBalance; 
-
+    string public typeOfLoan; 
     event Withdrawal(uint amount, uint when);
 
     
@@ -28,15 +28,89 @@ contract LoanApp {
         approved = true;
     }
 
-    //picks payment plan 1 - highest payment, shortest duration
-    function poo {
-
+    function compareStrings(string memory a, string memory b) public pure returns (bool) {
+         return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
     }
 
+    uint interestRate = 0; 
+    uint monthlyLoan = 0; 
+
+
+    //picks payment plan 1 - highest payment, shortest duration
+    function shortestPaymentPlan() public {
+    
+        if (compareStrings(typeOfLoan, "Home")) {
+         interestRate = 0.08; 
+         numMonths = 15 * 12; 
+        monthlyLoan = (totalReqAmount * interestRate * (1 + interestRate)^numMonths) / ((1 + interestRate)^numMonths - 1);
+        return monthlyLoan; 
+        } 
+        if (compareStrings(typeOfLoan, "Auto")) {
+         interestRate = 0.07;
+         numMonths = 3 * 12; 
+         monthlyLoan = (totalReqAmount * interestRate * (1 + interestRate)^numMonths) / ((1 + interestRate)^numMonths - 1);
+        return monthlyLoan; 
+        } 
+        if (compareStrings(typeOfLoan, "Personal")) {
+         interestRate = 0.10; 
+         numMonths = 2 * 12; 
+         monthlyLoan = (totalReqAmount * interestRate * (1 + interestRate)^numMonths) / ((1 + interestRate)^numMonths - 1);
+        return monthlyLoan; 
+        } 
+        else {
+            return "error in loan selection"; 
+        }
+    }   
+
     //picks payment plan 2 - medium payment, medium duration
+    function averagePaymentPlan() public {
+         if (compareStrings(typeOfLoan, "Home")) {
+         interestRate = 0.08; 
+         numMonths = 20 * 12; 
+        monthlyLoan = (totalReqAmount * interestRate * (1 + interestRate)^numMonths) / ((1 + interestRate)^numMonths - 1);
+        return monthlyLoan; 
+        } 
+        if (compareStrings(typeOfLoan, "Auto")) {
+         interestRate = 0.07;
+         numMonths = 6 * 12; 
+         monthlyLoan = (totalReqAmount * interestRate * (1 + interestRate)^numMonths) / ((1 + interestRate)^numMonths - 1);
+        return monthlyLoan; 
+        } 
+        if (compareStrings(typeOfLoan, "Personal")) {
+         interestRate = 0.10; 
+         numMonths = 5 * 12; 
+         monthlyLoan = (totalReqAmount * interestRate * (1 + interestRate)^numMonths) / ((1 + interestRate)^numMonths - 1);
+        return monthlyLoan; 
+        } 
+        else {
+            return "error in loan selection"; 
+        }
+    }
 
     //picks payment plan 3 - lowest payment, highest duration
-
+    function longestPaymentPlan() public {
+        if (compareStrings(typeOfLoan, "Home")) {
+         interestRate = 0.08; 
+         numMonths = 30 * 12; 
+        monthlyLoan = (totalReqAmount * interestRate * (1 + interestRate)^numMonths) / ((1 + interestRate)^numMonths - 1);
+        return monthlyLoan; 
+        } 
+        if (compareStrings(typeOfLoan, "Auto")) {
+         interestRate = 0.07;
+         numMonths = 8 * 12; 
+         monthlyLoan = (totalReqAmount * interestRate * (1 + interestRate)^numMonths) / ((1 + interestRate)^numMonths - 1);
+        return monthlyLoan; 
+        } 
+        if (compareStrings(typeOfLoan, "Personal")) {
+         interestRate = 0.10; 
+         numMonths = 7 * 12; 
+         monthlyLoan = (totalReqAmount * interestRate * (1 + interestRate)^numMonths) / ((1 + interestRate)^numMonths - 1);
+        return monthlyLoan; 
+        } 
+        else {
+            return "error in loan selection"; 
+        }
+    }
   
      //print out loan amount for user, and transfer the full loan amount to user account balance
     function withdraw() public {
