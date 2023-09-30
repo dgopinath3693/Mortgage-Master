@@ -105,6 +105,10 @@ contract LoanApp {
 
         return monthlyLoan;
     }
+
+    function testingCall() public pure returns (string memory) {
+        return "testing calls";
+    }
   
      /**
       * Withdraw the full loan amount to the user's account balance if they are approved.
@@ -126,9 +130,6 @@ contract LoanApp {
         totalLoanAmount -= _payment;
         emit loanAmount(totalLoanAmount);
     }
-
-
-
 
     /**
      * Method that updates the userBalance mapping to the user's current balance in their account when trying
