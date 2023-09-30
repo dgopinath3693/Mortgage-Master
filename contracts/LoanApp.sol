@@ -106,14 +106,18 @@ contract LoanApp {
         return monthlyLoan;
     }
 
+    /**
+     * Testing that the web3 connection with ethers works
+     */
     function testingCall() public pure returns (string memory) {
-        return "testing calls";
+        string memory testString = "testing calls";
+        return testString;
     }
   
      /**
       * Withdraw the full loan amount to the user's account balance if they are approved.
       */
-    function withdraw() public {
+    function withdraw() public returns (uint) {
         // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
         // console.log("The user's address: %s", user,"and the user's balance is %s", userBalance);
         require(approved);
@@ -122,7 +126,8 @@ contract LoanApp {
         userBalance[msg.sender] += totalLoanAmount;
         loanRepaymentValue += totalLoanAmount;
         console.log("totalLoanAmount = %s", totalLoanAmount," and the user balance is %s", userBalance[msg.sender]);
-        emit Withdrawal(totalLoanAmount);
+        // emit Withdrawal(totalLoanAmount);
+        return totalLoanAmount;
     }
 
     function payLoan(uint _payment) public {

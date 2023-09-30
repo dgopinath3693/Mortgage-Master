@@ -15,7 +15,7 @@ async function main() {
   const loanapp = await LoanApp.deploy(500000); // deploy with a uint constructor
 
 //   await loanapp.deployed(); // wait for contract to be deployed
-  console.log("Greeter deployed to:", loanapp.address);
+  console.log("Contract deployed to:", loanapp.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
