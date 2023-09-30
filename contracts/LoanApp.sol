@@ -12,9 +12,11 @@ contract LoanApp {
     address public user = msg.sender; //user's address
     mapping(address => uint256) userBalance;
     string public typeOfLoan; 
+    uint public loanRepaymentValue;
 
     event Withdrawal(uint _totalLoanAmount); // the event that will be emitted to frontend
-    
+    event loanAmount(uint _loanAmount);
+
     constructor(uint _totalLoanAmount) payable {
         setUserBalance(msg.sender, 100000); //currently hardcoded to 100000
         uint minReqBalance = _totalLoanAmount/4; 
@@ -111,12 +113,19 @@ contract LoanApp {
         // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
         // console.log("The user's address: %s", user,"and the user's balance is %s", userBalance);
         require(approved);
-        require(msg.sender == user, "You aren't the owner");
+        require(msg.sender == user, "You aren't the loan holder");
 
         userBalance[msg.sender] += totalLoanAmount;
-
+        loanRepaymentValue += totalLoanAmount;
         emit Withdrawal(totalLoanAmount);
     }
+
+    function payLoan(uint _payment) public {
+        require(msg.sender == user, "You aren't the loan holder");
+        totalLoanAmount -= _payment;
+        emit loanAmount(totalLoanAmount);
+    }
+
 
 
 
