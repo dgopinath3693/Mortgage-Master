@@ -14,9 +14,9 @@ contract LoanApp {
     string public typeOfLoan; 
 
     event Withdrawal(uint _totalLoanAmount); // the event that will be emitted to frontend
-    
+
     constructor(uint _totalLoanAmount) payable {
-        setUserBalance(msg.sender, 100000); //currently hardcoded to 100000
+        setUserBalance(msg.sender, 1000000); //currently hardcoded to 100000
         uint minReqBalance = _totalLoanAmount/4; 
         require(
             minReqBalance < userBalance[msg.sender],
@@ -114,7 +114,7 @@ contract LoanApp {
         require(msg.sender == user, "You aren't the owner");
 
         userBalance[msg.sender] += totalLoanAmount;
-
+        console.log("totalLoanAmount = %s", totalLoanAmount," and the user balance is %s", userBalance[msg.sender]);
         emit Withdrawal(totalLoanAmount);
     }
 
