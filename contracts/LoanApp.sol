@@ -15,7 +15,7 @@ contract LoanApp {
     uint public loanRepaymentValue;
 
     event Withdrawal(uint _totalLoanAmount); // the event that will be emitted to frontend
-    event loanAmount(uint _loanAmount);
+    event loanAmount(uint _loanAmount, uint _duration);
 
     constructor() {
         setUserBalance(msg.sender, 1000000); //currently hardcoded to 100000
@@ -56,6 +56,7 @@ contract LoanApp {
 
         monthlyLoan = numerator / denominator;
 
+        emit loanAmount(monthlyLoan, numMonths);
         return monthlyLoan;
     }
 
@@ -105,7 +106,6 @@ contract LoanApp {
         uint256 denominator = ((1 + rate)**numMonths - 1) * 10**18; // scale down by 10^18
 
         monthlyLoan = numerator / denominator;
-
         return monthlyLoan;
     }
 

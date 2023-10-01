@@ -19,6 +19,17 @@ const contractAddress =  "0xC4819Ba4186884fd2681E2B0Af70fb96F8B884f6"
 function App() {
 
   const [loanAmount, setLoanAmount] = useState('')
+  const [showElements, setShowElements] = useState(false);
+  const [showSecondaryElements, setShowSecondaryElements] = useState({button: false, input: false});
+  const [showTertiaryElements, setShowTertiaryElements] = useState(false);
+
+  // Define a state variable to store the data from the contract
+  const [shortestPlan, setShortestPlan] = useState(null); 
+  const [averagePlan, setAveragePlan] = useState(null); 
+  const [longestPlan, setLongestPlan] = useState(null); 
+
+  // var fetchAndSet = document.querySelectorAll(".fetchAndSet")
+  // fetchAndSet.forEach.disabled = false;
 
   const onboarding = new MetaMaskOnboarding();         // used to help user download metamask if not installed
   const hasMetaMask = useRef(false);                    // determines whether user should be linked to metamask install
@@ -77,9 +88,27 @@ function App() {
     }
   
     try {
+      setShowElements(false);
+      setShowTertiaryElements(true);
       const tx = await loanApp.setLoanAmount(loanAmount);
       await tx.wait();
       console.log("Loan requested successfully");
+      setShowSecondaryElements({button: false, input: false});
+
+ 
+
+      const shortest = await loanApp.shortestPaymentPlan();
+      loanApp.on("loanAmount", (value, duration) => {
+        setShortestPlan(`Shortest loan plan is `,{value}` for `,{duration}` months`);
+      })
+      // const average = await loanApp.averagePaymentPlan();
+      // const longest = await loanApp.longestPaymentPlan();   
+      
+      // setShortestPlan(shortest);
+      // setAveragePlan(average);
+      // setLongestPlan(longest);
+
+      
     } catch (err) {
       console.log("Error: ", err);
     }
@@ -124,19 +153,26 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1 className ='primary'>Welcome to Mortgage Master+!</h1>
-        <h2 className = 'secondary'>Please click 'Start Application' to get started.</h2>
-        <button className="btn_props" onClick={onClickConnect}>Start Application</button>
+        <h2 className = 'secondary' >Please connect your wallet and click 'Start Application' to get started.</h2>
         <button className="connect_wallet" onClick={onClickConnect}>Connect Wallet</button> {/*when button is clicked it invokes the onClickConnect method */}
-        <button onClick={(requestLoan)}>Request Loan</button>
-        <input
+        <button className="btn_props" onClick={() => setShowElements(true)}>Start Application</button>
+        {showElements && <button onClick={() => setShowSecondaryElements({button: true, input: true})}>Home</button>}
+        {showElements && <button onClick={() => setShowSecondaryElements({button: true, input: true})}>Auto</button>}
+        {showElements && <button onClick={() => setShowSecondaryElements({button: true, input: true})}>Personal</button>}
+        {showSecondaryElements.button && <button onClick={(requestLoan)}>Request Loan</button>}
+        {showSecondaryElements.input && <input
           type = "number"
           placeholder = "Enter loan amount"
           value = {loanAmount}
           onChange = {handleLoanAmountChange}
-        />
-          <button className="btn_props" onClick={fetchLoan}>Fetch Loan</button> {/*when button is clicked it invokes the fetchLoan method */}
+        />}
+        <p>{shortestPlan}</p>
+        {/* {averagePlan && <p>The average payment plan is: {averagePlan}</p>}
+        {longestPlan && <p>The longest payment plan is: {longestPlan}</p>} */}
+
+          {showTertiaryElements && <button className="btn_props fetchAndSet" onClick={fetchLoan}>Fetch Loan</button>} {/*when button is clicked it invokes the fetchLoan method */}
           <div id = "set"></div>
-          <button className="btn_props" onClick={setLoan}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
+          {showTertiaryElements && <button className="btn_props fetchAndSet" onClick={setLoan}>Set Loan</button>}     {/*when button is clicked it invokes the set Greeting method */}
       </header>
     </div>
   );
