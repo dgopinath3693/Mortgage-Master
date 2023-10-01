@@ -127,13 +127,6 @@ function App() {
         <h2 className = 'secondary'>Please click 'Start Application' to get started.</h2>
         <button className="btn_props" onClick={onClickConnect}>Start Application</button>
         <button className="connect_wallet" onClick={onClickConnect}>Connect Wallet</button> {/*when button is clicked it invokes the onClickConnect method */}
-          <button className="btn_props" onClick={fetchLoan}>Fetch Loan</button> {/*when button is clicked it invokes the fetchLoan method */}
-          <div id = "set"></div>
-          <button className="btn_props" onClick={setLoan}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
-        <h1 className ='primary'>Loan Management System</h1>
-        <button className="connect_wallet" onClick={onClickConnect}>
-          Connect Wallet
-        </button> {/*when button is clicked it invokes the onClickConnect method */}
         <button onClick={(requestLoan)}>Request Loan</button>
         <input
           type = "number"
@@ -141,19 +134,9 @@ function App() {
           value = {loanAmount}
           onChange = {handleLoanAmountChange}
         />
-          
-
-        <button className="btn_props" onClick={fetchLoan}>
-          Fetch Loan
-        </button> {/*when button is clicked it invokes the fetchLoan method */}
-        <div id = "set"></div>
-        <button className="btn_props" onClick={setLoan}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
-          {/* <input className="text_box"
-            onChange={e => setGreetingValue(e.target.value)}
-            placeholder="my new message"
-            id ="set"
-            value={greeting}
-        /> */}
+          <button className="btn_props" onClick={fetchLoan}>Fetch Loan</button> {/*when button is clicked it invokes the fetchLoan method */}
+          <div id = "set"></div>
+          <button className="btn_props" onClick={setLoan}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
       </header>
     </div>
   );

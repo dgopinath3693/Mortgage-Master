@@ -112,9 +112,8 @@ contract LoanApp {
     /**
      * Testing that the web3 connection with ethers works
      */
-    function testingCall() public pure returns (string memory) {
-        string memory testString = "testing calls";
-        return testString;
+    function testingCall() public view returns (uint) {
+        return userBalance[msg.sender];
     }
   
      /**
