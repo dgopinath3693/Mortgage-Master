@@ -1,3 +1,4 @@
+import detectEthereumProvider from '@metamask/detect-provider';
 import { useEffect, useRef, useState } from 'react';  // able to use react elements in page
 //import { ethers } from 'ethers';                      // ethersjs library. Connectivity to web3: https://docs.ethers.org/v5/
 // import {Helmet} from "react-helmet";                  // badgver image shown in tab
@@ -28,6 +29,8 @@ function App() {
   useEffect(() => {
     hasMetaMask.current = isMetaMaskInstalled();
   },[]);
+
+  
 
   // checks if the MetaMask extension is installed
   const isMetaMaskInstalled = () => {
@@ -86,8 +89,7 @@ function App() {
       // We need to have a way to create a transaction. In order to do that we need to sign the transaction using a signer
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();                                     // signs
-      const contract = new ethers.Contract(contractAddress
-    , LoanApp.abi, signer); // notice how it is "signer" for a change on the blockchain
+      const contract = new ethers.Contract(contractAddress, LoanApp.abi, signer); // notice how it is "signer" for a change on the blockchain
       // const transaction = await contract.setGreeting(greeting)                  // calls Contract.sol setGreeting method and uses gas
       const transaction = await contract.withdraw();
 
@@ -106,7 +108,7 @@ function App() {
         <button className="connect_wallet" onClick={onClickConnect}>Connect Wallet</button> {/*when button is clicked it invokes the onClickConnect method */}
           <button className="btn_props" onClick={fetchLoan}>Fetch Loan</button> {/*when button is clicked it invokes the fetchLoan method */}
           <div id = "set"></div>
-          <button className="btn_props" onClick={setLoan()}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
+          <button className="btn_props" onClick={setLoan}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
           {/* <input className="text_box"
             onChange={e => setGreetingValue(e.target.value)}
             placeholder="my new message"
