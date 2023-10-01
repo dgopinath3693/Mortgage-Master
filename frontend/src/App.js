@@ -94,10 +94,8 @@ function App() {
       // setGreetingValue('')
       // await transaction.wait()        // wait for the transaction to be confirmed on the blockchain; in a prod env this might take a while
     }
-  }
+  } 
 
-  
-  
   return (
     
     <div className="App">
@@ -106,7 +104,7 @@ function App() {
         <button className="connect_wallet" onClick={onClickConnect}>Connect Wallet</button> {/*when button is clicked it invokes the onClickConnect method */}
           <button className="btn_props" onClick={fetchLoan}>Fetch Loan</button> {/*when button is clicked it invokes the fetchLoan method */}
           <div id = "set"></div>
-          <button className="btn_props" onClick={setLoan()}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
+          <button className="btn_props" onClick={setLoan}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
           {/* <input className="text_box"
             onChange={e => setGreetingValue(e.target.value)}
             placeholder="my new message"
