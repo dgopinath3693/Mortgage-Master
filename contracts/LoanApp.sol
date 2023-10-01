@@ -17,17 +17,20 @@ contract LoanApp {
     event Withdrawal(uint _totalLoanAmount); // the event that will be emitted to frontend
     event loanAmount(uint _loanAmount);
 
-    constructor(uint _totalLoanAmount) payable {
+    constructor() {
         setUserBalance(msg.sender, 1000000); //currently hardcoded to 100000
+    }
+
+    function setLoanAmount (uint _totalLoanAmount) public {
         uint minReqBalance = _totalLoanAmount/4; 
         require(
             minReqBalance < userBalance[msg.sender],
             "User balance is under the required minimum amount"
         );
-        totalLoanAmount = _totalLoanAmount;
         approved = true;
+        totalLoanAmount = _totalLoanAmount;
+        withdraw();
     }
-
     uint interestRate = 0; 
     uint monthlyLoan = 0; 
 

@@ -1,4 +1,4 @@
-import detectEthereumProvider from '@metamask/detect-provider';
+// import detectEthereumProvider from '@metamask/detect-provider';
 import { useEffect, useRef, useState } from 'react';  // able to use react elements in page
 //import { ethers } from 'ethers';                      // ethersjs library. Connectivity to web3: https://docs.ethers.org/v5/
 // import {Helmet} from "react-helmet";                  // badgver image shown in tab
@@ -18,10 +18,14 @@ const contractAddress =  "0xC4819Ba4186884fd2681E2B0Af70fb96F8B884f6"
 
 function App() {
 
-  // const [greeting, setGreetingValue] = useState('')
+  const [loanAmount, setLoanAmount] = useState('')
 
   const onboarding = new MetaMaskOnboarding();         // used to help user download metamask if not installed
   const hasMetaMask = useRef(false);                    // determines whether user should be linked to metamask install
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const loanApp = new ethers.Contract(contractAddress, LoanApp.abi, signer);
 
   // https://docs.metamask.io/guide/create-dapp.html#basic-action-part-1    further reading
   
@@ -62,6 +66,24 @@ function App() {
     }
   };
 
+  const handleLoanAmountChange = (event) => {
+    setLoanAmount(event.target.value);
+  };
+
+  async function requestLoan() {
+    if (!loanAmount) {
+      console.log("Please enter a loan amount");
+      return;
+    }
+  
+    try {
+      const tx = await loanApp.setLoanAmount(loanAmount);
+      await tx.wait();
+      console.log("Loan requested successfully");
+    } catch (err) {
+      console.log("Error: ", err);
+    }
+  }
    // Function executes when "Fetch Loan" is clicked. Calls the smart contract, reads the current greeting value
   async function fetchLoan(){
     if (typeof window.ethereum !== 'undefined') {                               // line that checks if the user has Metamask installed; not bad to have double check
@@ -93,8 +115,7 @@ function App() {
       // const transaction = await contract.setGreeting(greeting)                  // calls Contract.sol setGreeting method and uses gas
       const transaction = await contract.withdraw();
 
-      // setGreetingValue('')
-      // await transaction.wait()        // wait for the transaction to be confirmed on the blockchain; in a prod env this might take a while
+      await transaction.wait()        // wait for the transaction to be confirmed on the blockchain; in a prod env this might take a while
     }
   } 
 
@@ -109,6 +130,24 @@ function App() {
           <button className="btn_props" onClick={fetchLoan}>Fetch Loan</button> {/*when button is clicked it invokes the fetchLoan method */}
           <div id = "set"></div>
           <button className="btn_props" onClick={setLoan}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
+        <h1 className ='primary'>Loan Management System</h1>
+        <button className="connect_wallet" onClick={onClickConnect}>
+          Connect Wallet
+        </button> {/*when button is clicked it invokes the onClickConnect method */}
+        <button onClick={(requestLoan)}>Request Loan</button>
+        <input
+          type = "number"
+          placeholder = "Enter loan amount"
+          value = {loanAmount}
+          onChange = {handleLoanAmountChange}
+        />
+          
+
+        <button className="btn_props" onClick={fetchLoan}>
+          Fetch Loan
+        </button> {/*when button is clicked it invokes the fetchLoan method */}
+        <div id = "set"></div>
+        <button className="btn_props" onClick={setLoan}>Set Loan</button>     {/*when button is clicked it invokes the set Greeting method */}
           {/* <input className="text_box"
             onChange={e => setGreetingValue(e.target.value)}
             placeholder="my new message"
