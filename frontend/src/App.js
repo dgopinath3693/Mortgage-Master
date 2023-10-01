@@ -102,7 +102,9 @@ function App() {
     
     <div className="App">
       <header className="App-header">
-        <h1 className ='primary'>Loan Management System</h1>
+        <h1 className ='primary'>Welcome to Mortgage Master+!</h1>
+        <h2 className = 'secondary'>Please click 'Start Application' to get started.</h2>
+        <button className="btn_props" onClick={onClickConnect}>Start Application</button>
         <button className="connect_wallet" onClick={onClickConnect}>Connect Wallet</button> {/*when button is clicked it invokes the onClickConnect method */}
           <button className="btn_props" onClick={fetchLoan}>Fetch Loan</button> {/*when button is clicked it invokes the fetchLoan method */}
           <div id = "set"></div>
