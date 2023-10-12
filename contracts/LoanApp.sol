@@ -61,7 +61,7 @@ contract LoanApp {
     }
 
     /**
-     * This payment plan is the shortest duration, but has the highest payments per month.
+     * This payment plan is the average duration, and has average payments per month.
      */
     function averagePaymentPlan() public returns (uint256) {
         uint256 numMonths;
@@ -86,7 +86,7 @@ contract LoanApp {
     }
 
     /**
-     * This payment plan is the shortest duration, but has the highest payments per month.
+     * This payment plan is the longest duration, but has the lowest payments per month.
      */
     function longestPaymentPlan() public returns (uint256) {
         uint256 numMonths;
@@ -135,7 +135,6 @@ contract LoanApp {
     function payLoan(uint _payment) public {
         require(msg.sender == user, "You aren't the loan holder");
         totalLoanAmount -= _payment;
-        emit loanAmount(totalLoanAmount);
     }
 
     /**
